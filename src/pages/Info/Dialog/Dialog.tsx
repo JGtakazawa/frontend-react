@@ -1,13 +1,12 @@
 import React from "react";
 import { DialogType } from "./DialogType";
-import { DialogInputType } from "./DialogType";
 
 // 今後はDialogInputTypeの型ごとにテキストフィールドのプレースホルダーの表示内用を変更する（そのそものテキストフィールドの型も変化させるようにしたい）
-const Dialog: React.FC<DialogType> = ({ title, input, onClose }) => {
+const Dialog: React.FC<DialogType> = ({ inputValue, input, onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
-        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+        <h2 className="text-xl font-semibold mb-4">{input.title}</h2>
         <div className="flex flex-row items-center">
           <p className="mb-0 mr-2">{input.label}</p>
           {input.required === "required" && (
@@ -16,7 +15,7 @@ const Dialog: React.FC<DialogType> = ({ title, input, onClose }) => {
         </div>
         <input
           type={input.type}
-          value={input.value}
+          value={inputValue}
           onChange={(e) => input.onChange(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded mb-4"
           required={input.required === "required"}

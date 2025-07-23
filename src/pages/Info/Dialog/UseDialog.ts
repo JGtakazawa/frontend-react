@@ -1,24 +1,24 @@
 // action, state, propsを設定して返す
 import { useState } from "react";
-import { DialogType } from "./DialogType";
 import { DialogInputType } from "./DialogType";
 
 type useDialogResult = {
-  dialogProps: DialogType | null; // ダイアログに渡すprops全体の型
+  inputValue: string;
+  dialogProps: DialogInputType | null; // ダイアログに渡すprops全体の型
   openDialog: (pattern: "create" | "edit" | "delete") => void; // ボタンパターンを受け取るように変更
   closeDialog: () => void; // ダイアログを閉じる関数
 };
 
 const useDialog = (): useDialogResult => {
-  const [dialogProps, setDialogProps] = useState<DialogType | null>(null);
+  const [dialogProps, setDialogProps] = useState<DialogInputType | null>(null);
   const [inputValue, setInputValue] = useState(""); // inputのvalueをここで管理することも検討
 
   //ダイアログのパターンをまとめているところ
   const inputConfigCreate: DialogInputType = {
+    title: "カテゴリ作成",
     label: "カテゴリ名",
     type: "text",
     required: "required",
-    value: inputValue, // inputValueはuseDialog内部で管理するか、呼び出し元から渡すか検討
     placeholder: "カテゴリ名を入力",
     buttonPattern: "create",
     onChange: (val) => {
@@ -26,39 +26,35 @@ const useDialog = (): useDialogResult => {
     },
   };
   const inputConfigEdit: DialogInputType = {
+    title: "カテゴリ編集",
     label: "カテゴリ名",
     type: "text",
     required: "required",
-    value: inputValue,
     placeholder: "カテゴリ名を入力",
     buttonPattern: "edit",
     onChange: (val) => setInputValue(val.toString()),
   };
   const inputConfigDelete: DialogInputType = {
+    title: "カテゴリ削除",
     label: "カテゴリ名",
     type: "text",
     required: "required",
-    value: inputValue,
     placeholder: "カテゴリ名を入力",
     buttonPattern: "delete",
     onChange: (val) => setInputValue(val.toString()),
   };
 
   const openDialog = (pattern: "create" | "edit" | "delete") => {
-    let title = "";
     let inputConfig: DialogInputType;
 
     switch (pattern) {
       case "create":
-        title = "カテゴリ作成";
         inputConfig = inputConfigCreate;
         break;
       case "edit":
-        title = "カテゴリ編集";
         inputConfig = inputConfigEdit;
         break;
       case "delete":
-        title = "カテゴリ削除";
         inputConfig = inputConfigDelete;
         break;
       default:
@@ -66,11 +62,7 @@ const useDialog = (): useDialogResult => {
         console.error("Unknown dialog pattern:", pattern);
         return;
     }
-    setDialogProps({
-      title: title,
-      input: inputConfig,
-      onClose: closeDialog,
-    });
+    setDialogProps(inputConfig);
   };
 
   const closeDialog = () => {
@@ -79,6 +71,7 @@ const useDialog = (): useDialogResult => {
   };
 
   return {
+    inputValue,
     dialogProps,
     openDialog,
     closeDialog,

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { DialogInputType } from "../../../pages/Info/Dialog/DialogType";
 import useDialog from "../../../pages/Info/Dialog/UseDialog";
 import Dialog from "../../../pages/Info/Dialog/Dialog";
 
@@ -30,7 +28,7 @@ const Sidebar: React.FC<SidebarPropsType> = ({ items }) => {
     "カオナビ・ガイド",
   ];
 
-  const { dialogProps, openDialog, closeDialog } = useDialog(); // 修正されたuseDialogフック
+  const { inputValue, dialogProps, openDialog, closeDialog } = useDialog(); // 修正されたuseDialogフック
 
   // ToDo: propsのitems配列から受け取ったデータをmap関数で回すような形式にいずれは変更する
   return (
@@ -72,16 +70,16 @@ const Sidebar: React.FC<SidebarPropsType> = ({ items }) => {
             </div>
             {dialogProps && (
               <Dialog
-                title={dialogProps.title}
-                input={dialogProps.input}
-                onClose={dialogProps.onClose}
+                inputValue={inputValue}
+                input={dialogProps}
+                onClose={closeDialog}
               />
             )}
             {dialogProps && (
               <Dialog
-                title={dialogProps.title}
-                input={dialogProps.input}
-                onClose={dialogProps.onClose}
+                inputValue={inputValue}
+                input={dialogProps}
+                onClose={closeDialog}
               />
             )}
           </div>

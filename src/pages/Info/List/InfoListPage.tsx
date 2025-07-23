@@ -97,19 +97,17 @@ const InfoListPage: React.FC = () => {
               <option value="desc">（すべて）</option>
             </select>
           </div>
-          <div className="absolute right-96">
-            <div className="flex items-center space-x-4 mb-4 ">
-              <select
-                id="sortBy"
-                name="sortBy"
-                className="px-3 py-2 border border-gray-300 rounded"
-              >
-                <option value="default">タイトル</option>
-                <option value="asc">作成者</option>
-                <option value="desc">掲載期間</option>
-              </select>
-              <label className="text-sm font-medium text-gray-700">8件</label>
-            </div>
+          <div className="flex items-center space-x-4 mb-4 absolute right-96 ">
+            <select
+              id="sortBy"
+              name="sortBy"
+              className="px-3 py-2 border border-gray-300 rounded"
+            >
+              <option value="default">タイトル</option>
+              <option value="asc">作成者</option>
+              <option value="desc">掲載期間</option>
+            </select>
+            <label className="text-sm font-medium text-gray-700">8件</label>
           </div>
         </div>
 
