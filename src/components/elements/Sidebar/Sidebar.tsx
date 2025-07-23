@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import useDialog from "../../../pages/Info/Dialog/UseDialog";
-import Dialog from "../../../pages/Info/Dialog/Dialog";
+import useDialog from "../../../pages/Info/List/components/Dialog/UseDialog";
+import Dialog from "../../../pages/Info/List/components/Dialog/Dialog";
 
 // SidebarProps
 export type Sidebar_ItemsType = {
