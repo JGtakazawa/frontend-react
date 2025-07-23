@@ -29,7 +29,6 @@ const InfoListPage: React.FC = () => {
   const sideBarItems: Sidebar_ItemsType = [
     { label: "新規", path: "/info/create" },
   ];
-  console.log(data);
 
   return (
     <div className="flex min-h-screen">
@@ -112,7 +111,7 @@ const InfoListPage: React.FC = () => {
         </div>
 
         {/* メインコンテンツ */}
-        <div className="flex-1 p-6 mt-12">
+        <div className="flex-1 p-6 mt-0">
           {data === null ? (
             <NoDataMessage message="インフォメーションが登録されていません" />
           ) : (
