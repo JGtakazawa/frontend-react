@@ -1,8 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { InfoListTablePropsType } from "../../../../../../share/types/info/info.props";
+import { InfoListTablePropsType } from "../../../../../../../share/types/info/info.props";
+import CheckBox from "../../../components/CheckBox/CheckBox";
 
-const InfoListTable: React.FC<InfoListTablePropsType> = ({ infos }) => {
+const InfoListTable: React.FC<InfoListTablePropsType> = ({
+  infos,
+  isChecked,
+  checkBoxChange,
+}) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border border-gray-300">
@@ -32,7 +37,12 @@ const InfoListTable: React.FC<InfoListTablePropsType> = ({ infos }) => {
               className="hover:bg-gray-100 transition duration-200"
             >
               <td className="border bg-white border-gray-300 px-4 py-2 text-center">
-                <input type="checkbox" value={info.id} />
+                <CheckBox
+                  checked={isChecked}
+                  disabled={false}
+                  onChange={checkBoxChange}
+                  id={info.id}
+                />
               </td>
               <td className="border bg-white border-gray-300 px-4 py-2 text-center text-purple-400 font-bold">
                 ◇
@@ -49,7 +59,7 @@ const InfoListTable: React.FC<InfoListTablePropsType> = ({ infos }) => {
                 山田 太郎
               </td>
               <td className="border bg-white border-gray-300 px-4 py-2">
-                {/*本来はこうしたい→ {info.startDate} 〜 {info.endDate} */}
+                {/*本来はこうしたい→ {info.startDate} 〜 {info.endDate} 現在は型情報が今のDBように修正できていない為、暫定の処理をしている*/}
                 20XX年◇月☆日 〜 20XX年◇月△日
               </td>
             </tr>

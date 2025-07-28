@@ -1,13 +1,21 @@
 import { InfoListResDataType } from "../../../../../share/types/info/info.res.data";
-import InfoListTable from "./components/InfoListTable";
+import InfoListTable from "./components/Table/InfoListTable";
 import { Sidebar_ItemsType } from "../../../components/elements/Sidebar/Sidebar";
 import Sidebar from "../../../components/elements/Sidebar/Sidebar";
 import useFetchData from "../../../hooks/useFetchData";
 import Spinner from "../../../components/elements/Spinner/Spinner";
 import NoDataMessage from "../../../components/elements/NoDataMessage/NoDataMessage";
 import { Link } from "react-router-dom";
+import Dialog from "./components/Dialog/Dialog";
+import useDialog from "./components/Dialog/UseDialog";
+import useCheckBox from "../components/CheckBox/UseCheckBox";
+import { DialogInputType } from "./components/Dialog/DialogType";
 
 const InfoListPage: React.FC = () => {
+  const { inputValue, dialogProps, openDialog, closeDialog, isOpen } =
+    useDialog();
+  const { isChecked, handleOnChange } = useCheckBox();
+
   const API_URL = import.meta.env.VITE_API_URL;
 
   // データを取得
@@ -25,10 +33,32 @@ const InfoListPage: React.FC = () => {
     return <p className="text-red-600 font-semibold">Server Error: {error}</p>;
   }
 
-  // サイドバーに渡す項目を定義
+  if (data === null) {
+    return (
+      <div className="flex-1 p-6 mt-0">
+        <NoDataMessage message="インフォメーションが登録されていません" />
+      </div>
+    );
+  }
+
+  // ToDo: いずれはここで渡すのも改良する
   const sideBarItems: Sidebar_ItemsType = [
-    { label: "新規", path: "/info/create" },
+    // カテゴリ系のデータを渡す
   ];
+
+  const infoDelete: DialogInputType = {
+    buttonPattern: "confirm",
+    title: "確認",
+    type: "flat",
+    content: "インフォメーションを削除しますが、よろしいですか？",
+  };
+
+  const nextDialogProps: DialogInputType = {
+    buttonPattern: "result",
+    title: "結果",
+    type: "flat",
+    content: "インフォメーションを更新しました。",
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -49,14 +79,22 @@ const InfoListPage: React.FC = () => {
                 新規
               </Link>
             </button>
-            <button>
-              <Link
-                to="/info/create"
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition duration-300"
-              >
-                削除
-              </Link>
+            <button
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300"
+              onClick={() => openDialog(infoDelete)}
+            >
+              削除
             </button>
+            <div>
+              <Dialog
+                inputValue={inputValue}
+                dialogProps={dialogProps}
+                onClose={closeDialog}
+                isOpen={isOpen}
+                openDialog={openDialog}
+                nextDialogProps={nextDialogProps}
+              />
+            </div>
           </div>
         </div>
         {/* ソート機能 */}
@@ -112,23 +150,14 @@ const InfoListPage: React.FC = () => {
 
         {/* メインコンテンツ */}
         <div className="flex-1 p-6 mt-0">
-          {data === null ? (
-            <NoDataMessage message="インフォメーションが登録されていません" />
-          ) : (
-            <InfoListTable infos={data.infos} />
-          )}
+          <InfoListTable
+            infos={data.infos}
+            isChecked={isChecked}
+            checkBoxChange={handleOnChange}
+          />
         </div>
       </div>
     </div>
-    // おそらく今後詳細画面で使用することになる編集ボタン
-    // <td className="border bg-white border-gray-300 px-4 py-2">
-    //  <Link
-    //    to={`/info/${info.id}/edit`}
-    //    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-300 whitespace-nowrap"
-    //  >
-    //   編集
-    //  </Link>
-    // </td>
   );
 };
 

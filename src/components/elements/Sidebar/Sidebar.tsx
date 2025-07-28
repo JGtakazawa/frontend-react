@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import useDialog from "../../../pages/Info/List/components/Dialog/UseDialog";
 import Dialog from "../../../pages/Info/List/components/Dialog/Dialog";
+import { DialogInputType } from "../../../pages/Info/List/components/Dialog/DialogType";
 
 // SidebarProps
 export type Sidebar_ItemsType = {
@@ -13,7 +14,8 @@ export type SidebarPropsType = {
 };
 
 const Sidebar: React.FC<SidebarPropsType> = ({ items }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { inputValue, dialogProps, openDialog, closeDialog, isOpen } =
+    useDialog();
 
   // ToDo: この辺のデータは親からpropsで受け取れるようにいずれする（実際のデータを扱うときは）
   // カテゴリのデータに関しては配列とかで受け取れる必要性があるが、ダイアログ系に関しては何行も作成とかするわけではないから、そこはまた別の受け皿を設けて、そこで受け取るようにする
@@ -28,18 +30,25 @@ const Sidebar: React.FC<SidebarPropsType> = ({ items }) => {
     "カオナビ・ガイド",
   ];
 
-  const { inputValue, dialogProps, openDialog, closeDialog } = useDialog(); // 修正されたuseDialogフック
-
+  const categoryNew: DialogInputType = {
+    buttonPattern: "create",
+    title: "カテゴリ新規",
+    type: "text",
+    label: "カテゴリ名",
+    required: "required",
+    placeholder: "カテゴリ名を入力",
+  };
+  const categoryEdit: DialogInputType = {
+    buttonPattern: "edit",
+    title: "カテゴリ編集",
+    type: "text",
+    label: "カテゴリ名",
+    required: "required",
+    placeholder: "カテゴリ名を入力",
+  };
   // ToDo: propsのitems配列から受け取ったデータをmap関数で回すような形式にいずれは変更する
   return (
     <>
-      <button
-        className="p-3 min-h-screen bg-blue-600 text-white md:hidden w-auto text-base"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        メニュー
-      </button>
-
       {/* カテゴリ表示用？ */}
       <div
         className={`w-96 p-4 bg-white min-h-screen md:block ${
@@ -57,33 +66,25 @@ const Sidebar: React.FC<SidebarPropsType> = ({ items }) => {
             <div className="ml-5 flex space-x-2">
               <button
                 className="bg-white text-blue-600 font-bold px-4 py-2 rounded hover:bg-blue-500 border border-blue-600"
-                onClick={() => openDialog("create")}
+                onClick={() => openDialog(categoryNew)}
               >
                 新規
               </button>
               <button
                 className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded"
-                onClick={() => openDialog("edit")}
+                onClick={() => openDialog(categoryEdit)}
               >
                 編集
               </button>
             </div>
-            {dialogProps && (
-              <Dialog
-                inputValue={inputValue}
-                input={dialogProps}
-                onClose={closeDialog}
-              />
-            )}
-            {dialogProps && (
-              <Dialog
-                inputValue={inputValue}
-                input={dialogProps}
-                onClose={closeDialog}
-              />
-            )}
+            <Dialog
+              inputValue={inputValue}
+              dialogProps={dialogProps}
+              onClose={closeDialog}
+              isOpen={isOpen}
+              openDialog={openDialog}
+            />
           </div>
-
           <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-sm mt-4">
             <thead>
               <tr>
